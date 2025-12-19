@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SohaibShop - Design, Présentations & Web</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #00c6ff;
+            --dark-bg: #1f2937;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            scroll-behavior: smooth;
+        }
+        .header-bg {
+            background-image: url('images/baner.jpeg');
+            background-size: cover;
+            background-position: center;
+            min-height: 30vh;
+            position: relative;
+        }
+        .whatsapp-button {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .whatsapp-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary-color);
+        }
+        .portfolio-card-link {
+            transition: all 0.3s ease;
+        }
+        .portfolio-card-link:hover {
+            background-color: #ebf5ff;
+            border-color: #3b82f6;
+            transform: scale(1.02);
+        }
+        .gallery-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        .gallery-img:hover {
+            transform: scale(1.05);
+        }
+        
+        .rtl-layout {
+            direction: rtl;
+            text-align: right;
+        }
+        .rtl-layout .flex-row-reverse {
+            flex-direction: row-reverse;
+        }
+
+        .logo-text {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 5px rgba(0, 123, 255, 0.8);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Language Toggle Button -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="lang-toggle" class="bg-white text-gray-800 font-semibold py-2 px-4 rounded-full shadow-lg border-2 border-gray-200 hover:bg-gray-100 transition duration-300">
+            <span id="lang-text">الدارجة</span>
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <div id="app-container"></div>
+
+    <script>
+        const WHATSAPP_NUMBER = "+212777467304";
+        
+        const content = {
+            fr: {
+                lang: 'fr',
+                dir: 'ltr',
+                title: 'SohaibShop - Design & Web',
+                tagline: 'Passionné par le design visuel et le développement, je transforme vos idées en créations percutantes. Mon objectif est de donner une identité unique à vos projets.',
+                contact_button: 'Contactez-moi via WhatsApp',
+                whatsapp_hello: 'Bonjour DesignShop, je souhaite commander...',
+                whatsapp_quote: 'J\'aimerais demander un devis pour un service de design ou de création web.',
+                
+                nav_services: 'Mes Services',
+                nav_contact: 'Contactez-moi',
+                nav_work: 'Mon Travail',
+                nav_pricing: 'Tarifs & Devis',
+
+                services_title: 'Mes Services Professionnels',
+                service1: {
+                    icon: 'fa-palette',
+                    title: 'Design Graphique',
+                    description: 'Conception de logos, flyers, cartes de visite et supports marketing.'
+                },
+                service2: {
+                    icon: 'fa-chart-bar',
+                    title: 'Présentations',
+                    description: 'Création de présentations PowerPoint ou Keynote modernes et dynamiques.'
+                },
+                service3: {
+                    icon: 'fa-code',
+                    title: 'Création de Sites Web',
+                    description: 'Développement de sites web modernes, responsives et adaptés à votre activité.'
+                },
+                
+                pricing_title: 'Mes Tarifs Détaillés',
+                pricing_intro: 'Découvrez ci-dessous mes tarifs. Tous les prix sont en MAD.',
+                pricing_button_custom: 'Demander un devis sur mesure',
+                
+                design_title: '1. Design Graphique',
+                design_details: [
+                    { name: "Design de Logo Simple", price: "30 MAD", detail: "Inclus fichiers source." },
+                    { name: "Design de Flyer A5", price: "50 MAD", detail: "Recto." },
+                    { name: "Design de Carte de Visite", price: "60 MAD", detail: "Recto-verso." }
+                ],
+
+                presentation_title: '2. Présentations Professionnelles',
+                presentation_details: [
+                    { name: "Création 5 Slides (Base)", price: "20 MAD", detail: "Conception du modèle." },
+                    { name: "Création 10 Slides (Standard)", price: "30 MAD", detail: "Design avancé & icônes." },
+                    { name: "Refonte 30+ Slides (Expert)", price: "45 MAD", detail: "Optimisation complète." }
+                ],
+
+                web_title: '3. Création de Sites Web',
+                web_details: [
+                    { name: "Site One-Page (Vitrine)", price: "Prix à négocier", detail: "Design moderne, responsive, idéal pour portfolio." },
+                    { name: "Site Multi-Pages (Business)", price: "Prix à négocier", detail: "Jusqu'à 5 pages, formulaire de contact, SEO de base." },
+                    { name: "Site E-commerce (Boutique)", price: "Prix à négocier", detail: "Gestion de produits, panier, paiement à la livraison." }
+                ],
+
+                payment_title: 'Méthodes de Paiement',
+                payment_methods: [
+                    { icon: 'fa-university', title: 'Virement / Versement', desc: 'CIH Bank, BMCE ou autre banque.' },
+                    { icon: 'fa-money-bill-wave', title: 'Agences de Cash', desc: 'Cash Plus ou Wafacash.' },
+                    { icon: 'fa-handshake', title: 'Main à main', desc: 'Paiement en espèces lors de la rencontre.' }
+                ],
+                payment_note: 'Les informations de paiement vous seront communiquées après validation sur WhatsApp.',
+                
+                work_title: 'Mon Travail & Portfolio',
+                work_text: 'Découvrez mes réalisations. Cliquez sur les maquettes pour télécharger mes présentations PDF.',
+                
+                static_portfolio_title: "Identité Visuelle & Logos",
+                static_portfolio_desc: "Sélection de mes meilleures créations graphiques.",
+                
+                portfolio_items: [
+                    { 
+                        title: "Maquettes de Présentations", 
+                        subtitle: "Étude : Centre de Services d'Impression",
+                        icon: "fa-desktop", 
+                        color: "text-blue-500",
+                        file: "centre_impression.pdf" 
+                    },
+                    { 
+                        title: "Maquettes de Présentations", 
+                        subtitle: "Sujet : Prévention des Risques Électriques",
+                        icon: "fa-desktop", 
+                        color: "text-blue-600",
+                        file: "risques_electriques.pdf" 
+                    }
+                ],
+                pdf_action: "Voir & Télécharger PDF",
+
+                footer_text: '© 2025 DesignShop. Tous droits réservés.',
+                switch_to: 'الدارجة' 
+            },
+            ma: {
+                lang: 'ma',
+                dir: 'rtl',
+                title: 'SohaibShop - Design & Web',
+                tagline: 'عزيز عليا design و تطوير المواقع و إنشاء العروض. كنحول الأفكار ديالكم لواقع احترافي باش نعطي لمسة خاصة لكل مشروع كنخدم عليه.',
+                contact_button: 'تواصل معايا ف واتساب',
+                whatsapp_hello: 'سلام DesignShop، بغيت ندوز كوموند...',
+                whatsapp_quote: 'بغيت نسول على ثمن شي خدمة ديال التصميم ولا تصميم المواقع.',
+
+                nav_services: 'الخدمات ديالي',
+                nav_contact: 'تواصل معايا',
+                nav_work: 'الخدمة ديالي',
+                nav_pricing: 'الأثمنة و التّسعيرة',
+
+                services_title: 'الخدمات لْاحترافية ديالي',
+                service1: {
+                    icon: 'fa-palette',
+                    title: 'التصميم الجرافيكي',
+                    description: 'تصميم الشعارات، لفلاير، و لي كارط ڤيزيت احترافية.'
+                },
+                service2: {
+                    icon: 'fa-chart-bar',
+                    title: 'عروض تقديمية',
+                    description: 'إعداد عروض (PowerPoint) مودرن و احترافية.'
+                },
+                service3: {
+                    icon: 'fa-code',
+                    title: 'تصميم المواقع',
+                    description: 'برمجة و تصميم مواقع إلكترونية زوينة و كتخدم فالتلفون.'
+                },
+                
+                pricing_title: 'الأثمنة ديالي',
+                pricing_intro: 'شوف الأثمنة ديال الخدمات ديالي. كلشي بالدرهم (د.م.).',
+                pricing_button_custom: 'طلب',
+
+                design_title: '1. التّصميم الجرافيكي',
+                design_details: [
+                    { name: "تصميم شعار ساهل", price: "30 د.م.", detail: "مع الملفات الأصلية." },
+                    { name: "تصميم فلاير A5", price: "50 د.م.", detail: "وجه واحد." },
+                    { name: "تصميم كارط ڤيزيت", price: "60 د.م.", detail: "وجهين." }
+                ],
+
+                presentation_title: '2. عروض تقديمية',
+                presentation_details: [
+                    { name: "نصاوب 5 Slides", price: "20 د.م.", detail: "تصميم القالب." },
+                    { name: "نصاوب 10 Slides", price: "30 د.م.", detail: "تصميم مزيان و أيقونات." },
+                    { name: "نْقاد كثر من 30 Slide", price: "45 د.م.", detail: "تحسين شامل." }
+                ],
+
+                web_title: '3. تصميم المواقع الإلكترونية',
+                web_details: [
+                    { name: "موقع صفحة واحدة (Vitrine)", price: "الثمن على حساب الخدمة", detail: "تصميم عصري، كيخدم فالتلفون، مزيان للتعريف بيك." },
+                    { name: "موقع بزاف دالصفحات (Business)", price: "الثمن على حساب الخدمة", detail: "حتى ل 5 صفحات، فورمات التواصل، SEO أساسي." },
+                    { name: "موقع تجاري (E-commerce)", price: "الثمن على حساب الخدمة", detail: "إدارة المنتجات، سلة الشراء، الخلاص عند الاستلام." }
+                ],
+
+                payment_title: 'طرق الخلاص (Paiement)',
+                payment_methods: [
+                    { icon: 'fa-university', title: 'تحويل بنكي', desc: 'CIH Bank، BMCE أو أي بنك آخر.' },
+                    { icon: 'fa-money-bill-wave', title: 'وكالات الكاش', desc: 'Cash Plus أو Wafacash.' },
+                    { icon: 'fa-handshake', title: 'يد ف اليد', desc: 'خلاص كاش ملي نتلاقاو.' }
+                ],
+                payment_note: 'معلومات الخلاص غادي نصيفطهم ليك ملي نتفقو ف واتساب.',
+
+                work_title: 'لْخدمة ديالي و Portfolio',
+                work_text: 'شوف الخدمة ديالي. برك على نماذج العروض باش تحملهم PDF.',
+                
+                static_portfolio_title: "Identité Visuelle & Logos",
+                static_portfolio_desc: "أحسن الشعارات و التصاميم ديالي.",
+
+                portfolio_items: [
+                    { 
+                        title: "نماذج عروض تقديمية", 
+                        subtitle: "دراسة : مركز خدمات الطباعة",
+                        icon: "fa-desktop", 
+                        color: "text-blue-500",
+                        file: "centre_impression.pdf" 
+                    },
+                    { 
+                        title: "نماذج عروض تقديمية", 
+                        subtitle: "موضوع : الوقاية من المخاطر الكهربائية",
+                        icon: "fa-desktop", 
+                        color: "text-blue-600",
+                        file: "risques_electriques.pdf" 
+                    }
+                ],
+                pdf_action: "تحميل PDF",
+
+                footer_text: '© 2025 DesignShop. كاع لْحقوق محفوظة.',
+                switch_to: 'Français' 
+            }
+        };
+
+        let currentLang = 'fr';
+
+        function createTemplate(langData) {
+            document.documentElement.lang = langData.lang;
+            document.documentElement.dir = langData.dir;
+            document.title = langData.title;
+
+            const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER.replace(/\+/g, '')}?text=${encodeURIComponent(langData.whatsapp_hello)}`;
+            const whatsappQuoteLink = `https://wa.me/${WHATSAPP_NUMBER.replace(/\+/g, '')}?text=${encodeURIComponent(langData.whatsapp_quote)}`;
+
+            const renderDetails = (details) => `
+                <ul class="space-y-3 ${langData.dir === 'rtl' ? 'text-right' : 'text-left'} mb-8 p-4 bg-white rounded-xl shadow-inner border border-gray-200">
+                    ${details.map(item => `
+                        <li class="flex items-start text-gray-700 p-2 border-b border-gray-100 last:border-b-0">
+                            <i class="fas fa-arrow-circle-${langData.dir === 'rtl' ? 'left' : 'right'} text-blue-500 ${langData.dir === 'rtl' ? 'ml-3' : 'mr-3'} flex-shrink-0 mt-1"></i>
+                            <div>
+                                <span class="font-semibold text-gray-800">${item.name}</span>: 
+                                <span class="text-blue-600 font-bold">${item.price}</span> 
+                                <span class="text-sm text-gray-500">(${item.detail})</span>
+                            </div>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+
+            return `
+                <header class="header-bg text-white shadow-xl mb-12">
+                    <div class="absolute inset-0 bg-gray-900 bg-opacity-70 backdrop-blur-sm"></div>
+                    <div class="container mx-auto px-4 py-6 relative z-10 flex flex-col items-center">
+                        <div class="flex flex-col md:flex-row items-center w-full mb-4">
+                            <div class="p-2 bg-white rounded-full mb-4 md:mb-0 
+                                 ${langData.dir === 'rtl' ? 'md:order-last md:ml-4' : 'md:order-first md:mr-4'} 
+                                 flex items-center justify-center border-3 border-blue-500 shadow-xl w-14 h-14">
+                                <span class="font-black text-4xl leading-none logo-text">S</span>
+                            </div>
+                            <div class="text-center p-2 flex-grow 
+                                 ${langData.dir === 'rtl' ? 'md:order-first md:text-right' : 'md:text-left'}">
+                                <h1 class="text-3xl md:text-4xl font-extrabold mb-1 text-white">${langData.title}</h1>
+                                <p class="text-lg md:text-xl font-light text-gray-300">${langData.tagline}</p>
+                            </div>
+                        </div>
+                        <nav class="w-full bg-blue-600 bg-opacity-80 rounded-xl p-3 shadow-lg">
+                            <div class="flex justify-center space-x-4 md:space-x-8 ${langData.dir === 'rtl' ? 'flex-row-reverse' : 'flex-row'} text-sm sm:text-base">
+                                <a href="#services" class="text-white hover:text-yellow-300 font-semibold p-2 rounded-lg hover:bg-blue-700">${langData.nav_services}</a>
+                                <a href="#pricing" class="text-white hover:text-yellow-300 font-semibold p-2 rounded-lg hover:bg-blue-700">${langData.nav_pricing}</a>
+                                <a href="#portfolio" class="text-white hover:text-yellow-300 font-semibold p-2 rounded-lg hover:bg-blue-700">${langData.nav_work}</a>
+                                <a href="${whatsappLink}" target="_blank" class="text-white hover:text-yellow-300 font-semibold p-2 rounded-lg hover:bg-blue-700">${langData.nav_contact}</a>
+                            </div>
+                        </nav>
+                    </div>
+                </header>
+
+                <a href="${whatsappLink}" target="_blank" class="whatsapp-button fixed bottom-6 ${langData.dir === 'rtl' ? 'left-6' : 'right-6'} z-40 flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full shadow-xl">
+                    <i class="fab fa-whatsapp text-2xl ${langData.dir === 'rtl' ? 'ml-2' : 'mr-2'}"></i>
+                    <span>${langData.contact_button}</span>
+                </a>
+
+                <section id="services" class="container mx-auto px-4 py-12">
+                    <h2 class="text-4xl font-bold text-center mb-10 text-gray-900 border-b-4 border-blue-500 pb-2">${langData.services_title}</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                        ${[langData.service1, langData.service2, langData.service3].map(service => `
+                            <div class="service-card bg-white p-6 rounded-2xl shadow-lg border-2 border-transparent flex flex-col items-center text-center">
+                                <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center mb-4 shadow-md">
+                                    <i class="fas ${service.icon} text-3xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-3 text-gray-900">${service.title}</h3>
+                                <p class="text-gray-600 text-sm">${service.description}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+                
+                <section id="pricing" class="container mx-auto px-4 py-12">
+                    <h2 class="text-4xl font-bold text-center mb-10 text-gray-900 border-b-4 border-blue-500 pb-2">${langData.pricing_title}</h2>
+                    <div class="bg-blue-50 p-8 rounded-2xl shadow-xl">
+                        <p class="text-lg text-gray-700 mb-10 text-center max-w-4xl mx-auto">${langData.pricing_intro}</p>
+                        
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-300 pb-2">${langData.design_title}</h3>
+                        ${renderDetails(langData.design_details)}
+                        
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-300 pb-2 mt-8">${langData.presentation_title}</h3>
+                        ${renderDetails(langData.presentation_details)}
+
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-300 pb-2 mt-8">${langData.web_title}</h3>
+                        ${renderDetails(langData.web_details)}
+
+                        <div class="mt-12 bg-white p-6 rounded-xl border border-blue-100 shadow-sm">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center italic">${langData.payment_title}</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                ${langData.payment_methods.map(method => `
+                                    <div class="flex items-center p-4 bg-blue-50 rounded-lg">
+                                        <div class="bg-blue-500 text-white p-3 rounded-full ${langData.dir === 'rtl' ? 'ml-4' : 'mr-4'} flex-shrink-0">
+                                            <i class="fas ${method.icon} text-xl w-6 text-center"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900 leading-tight">${method.title}</h4>
+                                            <p class="text-xs text-gray-600 mt-1">${method.desc}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <p class="text-center text-sm text-gray-500 mt-6 italic">${langData.payment_note}</p>
+                        </div>
+
+                        <div class="text-center mt-12 pt-6 border-t border-gray-200">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">${langData.pricing_button_custom}</h3>
+                            <a href="${whatsappQuoteLink}" target="_blank" class="whatsapp-button flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg max-w-sm mx-auto">
+                                <i class="fab fa-whatsapp text-xl ${langData.dir === 'rtl' ? 'ml-3' : 'mr-3'}"></i>
+                                <span>${langData.contact_button}</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="portfolio" class="container mx-auto px-4 py-12">
+                    <h2 class="text-4xl font-bold text-center mb-10 text-gray-900 border-b-4 border-blue-500 pb-2">${langData.work_title}</h2>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border-l-4 border-blue-400">
+                        <p class="text-lg text-gray-700 text-center mb-8">${langData.work_text}</p>
+                        
+                        <div class="mb-12">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                                <i class="fas fa-layer-group text-green-500 ${langData.dir === 'rtl' ? 'ml-3' : 'mr-3'}"></i>
+                                ${langData.static_portfolio_title}
+                            </h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="overflow-hidden rounded-lg bg-gray-100 border border-gray-200">
+                                    <img src="images/1.jpeg" alt="Logo" class="gallery-img" onerror="this.src='https://via.placeholder.com/300x200?text=Logo'">
+                                </div>
+                                <div class="overflow-hidden rounded-lg bg-gray-100 border border-gray-200">
+                                    <img src="images/2.jpeg" alt="Flyer" class="gallery-img" onerror="this.src='https://via.placeholder.com/300x200?text=Flyer'">
+                                </div>
+                                <div class="overflow-hidden rounded-lg bg-gray-100 border border-gray-200">
+                                    <img src="images/3.jpeg" alt="Card" class="gallery-img" onerror="this.src='https://via.placeholder.com/300x200?text=Card'">
+                                </div>
+                                <div class="overflow-hidden rounded-lg bg-gray-100 border border-gray-200">
+                                    <img src="images/logo.jpeg" alt="Project" class="gallery-img" onerror="this.src='https://via.placeholder.com/300x200?text=Design'">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                            ${langData.portfolio_items.map(item => `
+                                <a href="${item.file}" target="_blank" class="portfolio-card-link bg-gray-50 p-6 rounded-2xl text-center border-2 border-gray-200 shadow-sm block">
+                                    <i class="fas ${item.icon} text-6xl ${item.color} mb-4"></i>
+                                    <h4 class="text-xl font-bold text-gray-900 mb-1">${item.title}</h4>
+                                    <p class="text-gray-500 text-sm mb-4">${item.subtitle}</p>
+                                    <span class="inline-flex items-center bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-full">
+                                        <i class="fas fa-file-pdf ${langData.dir === 'rtl' ? 'ml-2' : 'mr-2'}"></i> ${langData.pdf_action}
+                                    </span>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="bg-gray-800 text-white py-6 mt-12 text-center">
+                    <p class="text-sm">${langData.footer_text}</p>
+                </footer>
+            `;
+        }
+
+        const appContainer = document.getElementById('app-container');
+        const langToggle = document.getElementById('lang-toggle');
+        const langText = document.getElementById('lang-text');
+
+        function toggleLanguage() {
+            currentLang = (currentLang === 'fr') ? 'ma' : 'fr';
+            renderContent();
+        }
+
+        function renderContent() {
+            const langData = content[currentLang];
+            appContainer.innerHTML = createTemplate(langData);
+            langText.textContent = (currentLang === 'fr') ? 'الدارجة' : 'Français';
+            
+            if (currentLang === 'ma') {
+                document.body.classList.add('rtl-layout');
+                langToggle.parentElement.classList.remove('right-4');
+                langToggle.parentElement.classList.add('left-4');
+            } else {
+                document.body.classList.remove('rtl-layout');
+                langToggle.parentElement.classList.remove('left-4');
+                langToggle.parentElement.classList.add('right-4');
+            }
+        }
+
+        langToggle.addEventListener('click', toggleLanguage);
+        renderContent();
+    </script>
+</body>
+</html>
